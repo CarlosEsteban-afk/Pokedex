@@ -48,6 +48,8 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
   return (
     <View style={{ ...styles.card, backgroundColor: color }}>
       {uri && <Image source={{ uri: uri }} style={styles.image} />}
+      
+      
       <Text style={styles.name}>{pokemon.name}</Text>
       {types.map((type) => (
         <Text key={type} style={styles.name}>
