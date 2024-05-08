@@ -11,7 +11,6 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import PokemonCard from '../../components/PokemonCard';
 import { getPokemonList } from '../../services';
 
@@ -31,7 +30,7 @@ function PokemonView(): React.JSX.Element {
   const fetchPokemon = async () => {
     setLoading(true);
     try {
-      const response = await getPokemonList({ limit: 151, offset: 0 });
+      const response = await getPokemonList({ limit: 1000, offset: 0 });
 
       setPokemonList(response.results);
       setLoading(false);

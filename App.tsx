@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-import type {PropsWithChildren} from 'react';
+import type { PropsWithChildren } from 'react';
 
 import {
   FlatList,
@@ -14,7 +14,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 import PokemonView from './src/pages/Home';
 
@@ -23,7 +23,7 @@ function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? Colors.darker : 'lightblue',
   };
 
   return (
@@ -32,6 +32,9 @@ function App(): React.JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
+      <Text style={styles.title}>
+        Pokedex
+      </Text>
       <PokemonView />
     </SafeAreaView>
   );
@@ -54,6 +57,14 @@ const styles = StyleSheet.create({
   highlight: {
     fontWeight: '700',
   },
+  title: {
+    fontSize: 50,
+    textAlign: 'center',
+    color: 'white',
+    textShadowColor: 'black',
+    textShadowRadius: 8,
+  }
+
 });
 
 export default App;
