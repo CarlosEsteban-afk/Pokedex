@@ -57,6 +57,7 @@ function PokemonView(): React.JSX.Element {
       renderItem={renderPokemonCard}
       keyExtractor={item => item.name}
       contentContainerStyle={styles.sectionContainer}
+      
     />
 
   );

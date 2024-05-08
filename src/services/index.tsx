@@ -19,13 +19,13 @@ const getPokemonList = async ({
   }
 };
 
-const getPokemonFormByName = async (name: string) => {
+const getPokemonByName = async (name: string) => {
   try {
-    const response = await client.getPokemonFormByName(name);
+    const response = await client.getPokemonByName(name);
     return response;
   } catch (error) {
     console.error('Error fetching Pokemon:', error);
     throw error;
   }
 };
-export { getPokemonList, getPokemonFormByName };
+export { getPokemonList, getPokemonByName };

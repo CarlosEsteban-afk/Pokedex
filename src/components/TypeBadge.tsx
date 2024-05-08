@@ -30,4 +30,5 @@ const styles = StyleSheet.create({
     },
 });
 
-export default TypeBadge;
+export default React.memo(TypeBadge)
+;
