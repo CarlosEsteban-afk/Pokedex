@@ -13,25 +13,24 @@ import {
 } from 'react-native';
 import PokemonCard from '../../components/PokemonCard';
 import { getPokemonList } from '../../services';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../types/Navigation';
 
 interface Result {
   name: string;
   url: string;
 }
+type PokemonListViewProps = NativeStackScreenProps<RootStackParamList, 'PokemonListView'>;
 
-function PokemonView(): React.JSX.Element {
+function PokemonListView({navigation}:Readonly<PokemonListViewProps>): React.JSX.Element {
   const [pokemonList, setPokemonList] = useState<Result[]>([]);
-  const [loading, setLoading] = useState<boolean>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    fetchPokemon();
-  }, []);
-
   const fetchPokemon = async () => {
     setLoading(true);
     try {
       const response = await getPokemonList({ limit: 1000, offset: 0 });
-
       setPokemonList(response.results);
       setLoading(false);
       return response;
@@ -40,6 +39,8 @@ function PokemonView(): React.JSX.Element {
       setLoading(false);
     }
   };
+    fetchPokemon();
+  }, []);
 
   if (loading) {
     return (
@@ -49,16 +50,20 @@ function PokemonView(): React.JSX.Element {
     );
   }
   const renderPokemonCard = ({ item }: { item: Result }) => <PokemonCard pokemon={item} />;
+  
 
   return (
-
-    <FlatList
-      data={pokemonList}
-      renderItem={renderPokemonCard}
-      keyExtractor={item => item.name}
-      contentContainerStyle={styles.sectionContainer}
-      
-    />
+    <View style={{backgroundColor:'lightblue'}}>
+      <Text style={styles.title}>
+        Pokedex
+      </Text>
+      <FlatList
+        data={pokemonList}
+        renderItem={renderPokemonCard}
+        keyExtractor={item => item.name}
+        contentContainerStyle={styles.sectionContainer}
+      />
+    </View>
 
   );
 }
@@ -66,7 +71,7 @@ function PokemonView(): React.JSX.Element {
 const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 32,
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
   },
   sectionTitle: {
     fontSize: 24,
@@ -80,6 +85,13 @@ const styles = StyleSheet.create({
   highlight: {
     fontWeight: '700',
   },
+  title: {
+    fontSize: 50,
+    textAlign: 'center',
+    color: 'white',
+    textShadowColor: 'black',
+    textShadowRadius: 8,
+  }
 });
 
-export default PokemonView;
+export default PokemonListView;

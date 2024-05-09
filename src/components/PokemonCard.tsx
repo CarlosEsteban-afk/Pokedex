@@ -1,50 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, Image, StyleSheet, ActivityIndicator, Touchable, TouchableOpacity } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types/Navigation';
 import { getPokemonByName } from '../services';
 import pokemonTypeColors from '../utils/getColorByType';
 import TypeBadge from './TypeBadge';
 import type { Pokemon } from 'pokenode-ts';
+import { useNavigation } from '@react-navigation/native';
 interface PokemonResources {
   name: string;
   url: string;
 }
 
-interface PokemonCardProps {
+type PokemonCardProps = {
   pokemon: PokemonResources;
 }
 
 const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
-  const [uri, setUri] = useState<string>();
-  const [color, setColor] = useState<string>();
-  const [types, setTypes] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>();
-  const [idPkmn, setIdPkmn] = useState<number>();
-  const [namePkmn, setNamePkmn] = useState<string>();
-
-  const fetchPokemon = async () => {
-    setLoading(true);
-    try {
-      const pkmn = await getPokemonByName(pokemon.name);
-      setPokemonData(pkmn);
-      setLoading(false);
-      return pkmn;
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const [pkmn, setPkmn] = useState<Pokemon>();
+  const navigation = useNavigation();
   useEffect(() => {
+    const fetchPokemon = async () => {
+      setLoading(true);
+      try {
+        const _pkmn = await getPokemonByName(pokemon.name);
+        setPkmn({ ..._pkmn });
+        return _pkmn;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
     fetchPokemon();
-  }, []);
-  const setPokemonData = (pkmn: Pokemon) => {
+  }, [pokemon.name]);
 
-    setTypes(pkmn.types.map((type) => type.type.name));
-    setColor(pokemonTypeColors[pkmn.types[0].type.name]);
-    setUri(pkmn.sprites.versions['generation-iii']['firered-leafgreen'].front_default ?? '');
-    setIdPkmn(pkmn.id);
-    setNamePkmn(pkmn.name.charAt(0).toUpperCase() + pkmn.name.slice(1));
-
+  const uri = pkmn?.sprites?.front_default;
+  const color = pokemonTypeColors[pkmn?.types[0].type.name as string];
+  const handlePress = () => {    
+    navigation.navigate('PokemonDetailView', { pokemon_name: pkmn?.name });
   }
-
   if (loading) {
     return (
       <View style={[styles.card, styles.loadingContainer]}>
@@ -53,33 +49,23 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
     );
   }
   return (
-    <View style={{ ...styles.card, borderColor: color }} >
 
-      {uri && <Image source={{ uri: uri }} style={styles.image} resizeMode='cover' />}
-
-
-      <View style={styles.cardInfo}>
-
-        <View style={styles.nameContainer}>
-
-          <Text style={styles.pkmnName} adjustsFontSizeToFit numberOfLines={1}>#{idPkmn + ' ' + namePkmn}</Text>
-
+    <TouchableOpacity onPress={handlePress}>
+      <View style={{ ...styles.card, borderColor: color }} >
+        {uri && <Image source={{ uri: uri }} style={styles.image} resizeMode='cover' />}
+        <View style={styles.cardInfo}>
+          <View style={styles.nameContainer}>
+            <Text style={styles.pkmnName} adjustsFontSizeToFit numberOfLines={1}>#{pkmn?.id + ' ' + pkmn?.name.charAt(0).toUpperCase() + pkmn?.name.slice(1)}</Text>
+          </View>
+          <View style={{ ...styles.typeContainer }} >
+            {pkmn?.types.map((type) => (
+              <TypeBadge key={type.type.name} type={type.type.name} />
+            ))}
+          </View>
         </View>
-
-        <View style={{ ...styles.typeContainer }} >
-
-          {types.map((type) => (
-            <TypeBadge key={type} type={type} />
-          ))}
-
-
-
-        </View>
-
       </View>
+    </TouchableOpacity>
 
-
-    </View>
   );
 };
 
@@ -135,4 +121,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default PokemonCard;
+export default React.memo(PokemonCard);
