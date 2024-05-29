@@ -28,4 +28,15 @@ const getPokemonByName = async (name: string) => {
     throw error;
   }
 };
-export { getPokemonList, getPokemonByName };
+
+const getTest = async (name: string) => {
+  try {
+    const response = await client.getPokemonSpeciesByName(name);
+    return response;
+  } catch (error) {
+    console.error('Error fetching Pokemon:', error);
+    throw error;
+  }
+}
+
+export { getPokemonList, getPokemonByName , getTest};

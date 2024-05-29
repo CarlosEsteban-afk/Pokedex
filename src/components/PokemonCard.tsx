@@ -38,8 +38,11 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
 
   const uri = pkmn?.sprites?.front_default;
   const color = pokemonTypeColors[pkmn?.types[0].type.name as string];
-  const handlePress = () => {    
-    navigation.navigate('PokemonDetailView', { pokemon_name: pkmn?.name });
+  const handlePress = () => {
+    //sprites?.other?.['official-artwork']?.front_default;
+
+    const sprite = pkmn?.sprites?.other?.['official-artwork'].front_default;
+    navigation.navigate('PokemonDetailView', { pokemon_name: pkmn?.name, uri: sprite, color: color });
   }
   if (loading) {
     return (

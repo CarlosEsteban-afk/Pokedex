@@ -26,8 +26,10 @@ function HomeView({ navigation }: Readonly<HomeViewProps>): React.JSX.Element {
 
 const styles = StyleSheet.create({
   sectionContainer: {
-    marginTop: 32,
     paddingHorizontal: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
   },
   sectionTitle: {
     fontSize: 24,

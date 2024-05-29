@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import type { PropsWithChildren } from 'react';
 import {
   FlatList,
@@ -22,46 +22,68 @@ interface Result {
 }
 type PokemonListViewProps = NativeStackScreenProps<RootStackParamList, 'PokemonListView'>;
 
-function PokemonListView({navigation}:Readonly<PokemonListViewProps>): React.JSX.Element {
+function PokemonListView({ navigation }: Readonly<PokemonListViewProps>): React.JSX.Element {
   const [pokemonList, setPokemonList] = useState<Result[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);  
+  const [page, setPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState<boolean>(true);
 
-  useEffect(() => {
+  const limit = 20
+
   const fetchPokemon = async () => {
     setLoading(true);
     try {
-      const response = await getPokemonList({ limit: 1000, offset: 0 });
-      setPokemonList(response.results);
-      setLoading(false);
-      return response;
+      const response = await getPokemonList({ limit, offset: (page - 1) * limit });
+      if (response.results.length > 0) {
+        setPokemonList(prevList => [...prevList, ...response.results]);
+        setPage(prevPage => prevPage + 1);
+      }else {
+        setHasMore(false);
+      }
     } catch (error) {
       console.log(error);
+    } finally {
       setLoading(false);
     }
-  };
+
+  }
+
+  const handleLoadMore = useCallback(() => {
+    if (!loading && hasMore) {
+      fetchPokemon();
+    }
+  }, [loading, hasMore]);
+
+  useEffect(() => {
     fetchPokemon();
   }, []);
 
-  if (loading) {
-    return (
-      <View style={styles.sectionDescription}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
+ const renderFooter = () => {
+    if (loading) {
+      return (
+        <View style={styles.sectionDescription}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      );
+    }
+    return null;
+  };
   const renderPokemonCard = ({ item }: { item: Result }) => <PokemonCard pokemon={item} />;
-  
+
 
   return (
-    <View style={{backgroundColor:'lightblue'}}>
-      <Text style={styles.title}>
-        Pokedex
-      </Text>
+    <View style={{ backgroundColor: 'lightblue' }}>
       <FlatList
         data={pokemonList}
         renderItem={renderPokemonCard}
         keyExtractor={item => item.name}
         contentContainerStyle={styles.sectionContainer}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.1}
+        removeClippedSubviews
+        ListFooterComponent={renderFooter}
+        initialNumToRender={10} 
+        // showsVerticalScrollIndicator={false}
       />
     </View>
 
