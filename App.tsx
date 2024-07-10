@@ -20,7 +20,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { RootStackParamList } from './src/types/Navigation';
 import HomeView from './src/pages/Home/HomeView';
 import PokemonListView from './src/pages/PokemonList/PokemonList';
-import PokemonDetailView from './src/pages/PokemonDetail/DetailView'; 
+import PokemonDetailView from './src/pages/PokemonDetail/DetailView';
+import TeamView from './src/pages/TeamDetail/TeamView';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -44,6 +45,7 @@ function App(): React.JSX.Element {
           <RootStack.Screen name="HomeView" component={HomeView}  options={{title:'PokeApp'}} />
           <RootStack.Screen name="PokemonListView" component={PokemonListView} options={{title:'Pokedex'}} />
           <RootStack.Screen name="PokemonDetailView" component={PokemonDetailView} options={{title:'Pokemon'}} />
+          <RootStack.Screen name="TeamView" component={TeamView} options={{ title: 'Team' }} />
         </RootStack.Navigator>
       
     </NavigationContainer>

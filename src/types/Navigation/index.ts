@@ -6,6 +6,7 @@ export type RootStackParamList = {
     uri: string | null | undefined;
     color: string | undefined;
   };
+  TeamView: undefined;
 };
 declare global {
   namespace ReactNavigation {
