@@ -1,48 +1,59 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, Image, ScrollView } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { StyleSheet, Text, View, ActivityIndicator, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../../types/Navigation';
 import { getTest, getPokemonType } from '../../services';
 import type { PokemonSpecies, PokemonType } from 'pokenode-ts';
+import { TeamContext } from '../../contexts/TeamContext';
+import pokemonTypeColors from '../../utils/getColorByType'; // Import your color utility
 
 type PokemonDetailViewProps = NativeStackScreenProps<RootStackParamList, 'PokemonDetailView'>;
 
-const PokemonDetailView = ({ route }: Readonly<PokemonDetailViewProps>): React.JSX.Element => {
+const PokemonDetailView = ({ route, navigation }: PokemonDetailViewProps): React.JSX.Element => {
   const { pokemon_name, uri, color, typeUri } = route.params;
+  const { addPokemon } = useContext(TeamContext);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [pkmnSpecie, setPkmnSpecie] = useState<PokemonSpecies>();
   const [types, setTypes] = useState<string[]>([]);
+  const [showToast, setShowToast] = useState<boolean>(false); // State for showing toast message
 
   const fetchPokemon = async () => {
-    try {
-      const _pkmnSpecie = await getTest(pokemon_name as string);
-      setPkmnSpecie(_pkmnSpecie);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        try {
+          const _pkmnSpecie = await getTest(pokemon_name as string);
+          setPkmnSpecie(_pkmnSpecie);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-  const fetchTypes = async () => {
-    if (!typeUri) return;
-    try {
-      const fetchedTypes = await Promise.all(typeUri.map(uri => getPokemonType(uri)));
-      const spanishTypeNames = fetchedTypes.map(type =>
-        type.names.find(name => name.language.name === 'es')?.name as string
-
-      );
-      setTypes(spanishTypeNames);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+      const fetchTypes = async () => {
+        if (!typeUri) return;
+        try {
+          const fetchedTypes = await Promise.all(typeUri.map(uri => getPokemonType(uri)));
+          const spanishTypeNames = fetchedTypes.map(type =>
+            type.names.find(name => name.language.name === 'es')?.name as string
+          );
+          setTypes(spanishTypeNames);
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
   useEffect(() => {
     fetchPokemon();
     fetchTypes();
   }, [pokemon_name, typeUri]);
+
+  const handleAddToTeam = () => {
+    if (pkmnSpecie) {
+      addPokemon({ id: pkmnSpecie.id.toString(), name: pkmnSpecie.name });
+      setShowToast(true); // Show the toast message
+      setTimeout(() => setShowToast(false), 2000); // Hide the toast after 2 seconds
+    }
+  };
 
   if (loading || !pkmnSpecie) {
     return (
@@ -56,6 +67,19 @@ const PokemonDetailView = ({ route }: Readonly<PokemonDetailViewProps>): React.J
 
   return (
     <View style={[styles.container, { backgroundColor: 'lightblue' }]}>
+      <TouchableOpacity
+        style={[styles.addButton, { backgroundColor: color }]}
+        onPress={handleAddToTeam}
+      >
+        <Text style={styles.addButtonText}>Add</Text>
+      </TouchableOpacity>
+
+      {showToast && (
+        <View style={styles.toast}>
+          <Text style={styles.toastText}>Added to team!</Text>
+        </View>
+      )}
+
       <View style={[styles.imageContainer, { borderColor: color }]}>
         {uri && <Image source={{ uri }} style={styles.image} />}
       </View>
@@ -92,6 +116,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  addButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    padding: 10,
+    borderRadius: 5,
+    zIndex: 1,
+  },
+  addButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
   imageContainer: {
     backgroundColor: 'lightyellow',
@@ -130,6 +166,20 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'justify',
     marginBottom: 10,
+  },
+  toast: {
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    padding: 10,
+    borderRadius: 5,
+    position: 'absolute',
+    bottom: 50,
+    left: 20,
+    right: 20,
+    zIndex: 9999,
+  },
+  toastText: {
+    color: 'white',
+    textAlign: 'center',
   },
 });
 

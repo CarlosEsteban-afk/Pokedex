@@ -22,6 +22,7 @@ import HomeView from './src/pages/Home/HomeView';
 import PokemonListView from './src/pages/PokemonList/PokemonList';
 import PokemonDetailView from './src/pages/PokemonDetail/DetailView';
 import TeamView from './src/pages/TeamDetail/TeamView';
+import { TeamProvider } from './src/contexts/TeamContext';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -34,21 +35,20 @@ function App(): React.JSX.Element {
   };
 
   return (
-    <NavigationContainer>
-        
+    <TeamProvider>
+      <NavigationContainer>
         <StatusBar
           barStyle={isDarkMode ? 'light-content' : 'dark-content'}
           backgroundColor={backgroundStyle.backgroundColor}
         />
-
         <RootStack.Navigator>
-          <RootStack.Screen name="HomeView" component={HomeView}  options={{title:'PokeApp'}} />
-          <RootStack.Screen name="PokemonListView" component={PokemonListView} options={{title:'Pokedex'}} />
-          <RootStack.Screen name="PokemonDetailView" component={PokemonDetailView} options={{title:'Pokemon'}} />
+          <RootStack.Screen name="HomeView" component={HomeView} options={{ title: 'PokeApp' }} />
+          <RootStack.Screen name="PokemonListView" component={PokemonListView} options={{ title: 'Pokedex' }} />
+          <RootStack.Screen name="PokemonDetailView" component={PokemonDetailView} options={{ title: 'Pokemon' }} />
           <RootStack.Screen name="TeamView" component={TeamView} options={{ title: 'Team' }} />
         </RootStack.Navigator>
-      
-    </NavigationContainer>
+      </NavigationContainer>
+    </TeamProvider>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, Image, StyleSheet, ActivityIndicator, Touchable, TouchableOpacity } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/Navigation';
@@ -20,6 +20,7 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
   const [loading, setLoading] = useState<boolean>();
   const [pkmn, setPkmn] = useState<Pokemon>();
   const navigation = useNavigation();
+
   useEffect(() => {
     const fetchPokemon = async () => {
       setLoading(true);
