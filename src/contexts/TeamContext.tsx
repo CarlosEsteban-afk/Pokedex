@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useMemo } from 'react';
 
 interface Pokemon {
   id: string;
@@ -11,7 +11,7 @@ interface TeamContextProps {
   removePokemon: (id: string) => void;
 }
 
-export const TeamContext = createContext<TeamContextProps | undefined>(undefined);
+export const TeamContext = createContext<TeamContextProps>({} as TeamContextProps);
 
 export const useTeam = () => {
   const context = useContext(TeamContext);
@@ -48,8 +48,15 @@ export const TeamProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+
+  const providerValue = useMemo(() => ({
+    team,
+    addPokemon,
+    removePokemon,
+  }), [team, addPokemon, removePokemon]);
+
   return (
-    <TeamContext.Provider value={{ team, addPokemon, removePokemon }}>
+    <TeamContext.Provider value={providerValue}>
       {children}
     </TeamContext.Provider>
   );

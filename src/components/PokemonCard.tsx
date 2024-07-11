@@ -1,8 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, Image, StyleSheet, ActivityIndicator, Touchable, TouchableOpacity } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types/Navigation';
-import { getPokemonByName } from '../services';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { getPokemonByName ,getPokemonType} from '../services';
 import pokemonTypeColors from '../utils/getColorByType';
 import TypeBadge from './TypeBadge';
 import type { Pokemon } from 'pokenode-ts';
@@ -19,32 +17,36 @@ type PokemonCardProps = {
 const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
   const [loading, setLoading] = useState<boolean>();
   const [pkmn, setPkmn] = useState<Pokemon>();
+  const [types, setTypes] = useState<string[]>([]);
+
   const navigation = useNavigation();
+  const fetchPokemon = async () => {
+    setLoading(true);
+    try {
+      const _pkmn = await getPokemonByName(pokemon.name);
+      const _types = await Promise.all(_pkmn.types.map(type => getPokemonType(type.type.url)));
+      const spanishTypeNames = _types.map(type =>
+        type.names.find(name => name.language.name === 'es')?.name as string
+      );
+      setTypes(spanishTypeNames);
+      setPkmn({ ..._pkmn });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    const fetchPokemon = async () => {
-      setLoading(true);
-      try {
-        const _pkmn = await getPokemonByName(pokemon.name);
-        setPkmn({ ..._pkmn });
-        return _pkmn;
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    }
     fetchPokemon();
   }, [pokemon.name]);
 
   const uri = pkmn?.sprites?.front_default;
   const color = pokemonTypeColors[pkmn?.types[0].type.name as string];
   const handlePress = () => {
-    //sprites?.other?.['official-artwork']?.front_default;
-
     const sprite = pkmn?.sprites?.other?.['official-artwork'].front_default;
     const typeUri = pkmn?.types.map((type) => type.type.url);
-    navigation.navigate('PokemonDetailView', { pokemon_name: pkmn?.name, uri: sprite, color: color, typeUri: typeUri});
+    navigation.navigate('PokemonDetailView', { pokemon_name: pkmn?.name, uri: sprite, color: color, typeUri: typeUri });
   }
   if (loading) {
     return (
@@ -63,8 +65,8 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
             <Text style={styles.pkmnName} adjustsFontSizeToFit numberOfLines={1}>#{pkmn?.id + ' ' + pkmn?.name.charAt(0).toUpperCase() + pkmn?.name.slice(1)}</Text>
           </View>
           <View style={{ ...styles.typeContainer }} >
-            {pkmn?.types.map((type) => (
-              <TypeBadge key={type.type.name} type={type.type.name} />
+            {types?.map((type) => (
+              <TypeBadge key={type} type={type} />
             ))}
           </View>
         </View>

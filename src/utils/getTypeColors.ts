@@ -1,81 +1,81 @@
 interface TypeColor {
-    name: string;
-    color: string;
-  }
-  
-  interface TypeColorMap {
-    [key: string]: TypeColor;
-  }
-const typeColor:TypeColorMap = {
-  normal: {
+  name: string;
+  color: string;
+}
+
+interface TypeColorMap {
+  [key: string]: TypeColor;
+}
+const typeColor: TypeColorMap = {
+  Normal: {
     name: 'nrml',
     color: '#A8A77A',
   },
-  fighting: {
+  Lucha: {
     name: 'ftg',
     color: '#C22E28',
   },
-  flying: {
+  Volador: {
     name: 'fly',
     color: '#A98FF3',
   },
-  poison: {
+  Veneno: {
     name: 'psn',
     color: '#A33EA1',
   },
-  ground: {
+  Tierra: {
     name: 'grnd',
-    color:  '#E2BF65',
+    color: '#E2BF65',
   },
-  rock: {
+  Roca: {
     name: 'rck',
     color: '#B6A136',
   },
-  bug: {
+  Bicho: {
     name: 'bug',
-    color:  '#A6B91A',
+    color: '#A6B91A',
   },
-  ghost: {
+  Fantasma: {
     name: 'ghst',
     color: '#735797',
   },
-  steel: {
+  Acero: {
     name: 'stl',
     color: '#B7B7CE',
   },
-  fire: {
+  Fuego: {
     name: 'fire',
-    color:  '#FA6C6C'
+    color: '#FA6C6C',
   },
-  water: {
+  Agua: {
     name: 'wter',
     color: '#6390F0',
   },
-  grass: {
+  Planta: {
     name: 'grss',
     color: '#48CFB2',
   },
-  electric: {
+  Eléctrico: {
     name: 'elctrc',
     color: '#F7D02C',
   },
-  psychic: {
+  Psíquico: {
     name: 'psy',
     color: '#F95587',
   },
-  ice: {
+  Hielo: {
     name: 'ice',
     color: '#96D9D6',
   },
-  dragon: {
+  Dragón: {
     name: 'drgn',
     color: '#6F35FC',
   },
-  dark: {
+  Siniestro: {
     name: 'drk',
     color: '#705746',
   },
-  fairy: {
+  Hada: {
     name: 'fry',
     color: '#D685AD',
   },

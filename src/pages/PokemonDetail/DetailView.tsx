@@ -19,28 +19,28 @@ const PokemonDetailView = ({ route, navigation }: PokemonDetailViewProps): React
   const [showToast, setShowToast] = useState<boolean>(false); // State for showing toast message
 
   const fetchPokemon = async () => {
-        try {
-          const _pkmnSpecie = await getTest(pokemon_name as string);
-          setPkmnSpecie(_pkmnSpecie);
-        } catch (error) {
-          console.error(error);
-        } finally {
-          setLoading(false);
-        }
-      };
+    try {
+      const _pkmnSpecie = await getTest(pokemon_name as string);
+      setPkmnSpecie(_pkmnSpecie);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      const fetchTypes = async () => {
-        if (!typeUri) return;
-        try {
-          const fetchedTypes = await Promise.all(typeUri.map(uri => getPokemonType(uri)));
-          const spanishTypeNames = fetchedTypes.map(type =>
-            type.names.find(name => name.language.name === 'es')?.name as string
-          );
-          setTypes(spanishTypeNames);
-        } catch (error) {
-          console.error(error);
-        }
-      };
+  const fetchTypes = async () => {
+    if (!typeUri) return;
+    try {
+      const fetchedTypes = await Promise.all(typeUri.map(uri => getPokemonType(uri)));
+      const spanishTypeNames = fetchedTypes.map(type =>
+        type.names.find(name => name.language.name === 'es')?.name as string
+      );
+      setTypes(spanishTypeNames);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     fetchPokemon();
@@ -85,18 +85,18 @@ const PokemonDetailView = ({ route, navigation }: PokemonDetailViewProps): React
       </View>
 
       <Text style={styles.title}>
-        #{pkmnSpecie.id} {pkmnSpecie.name}
+        #{pkmnSpecie?.id + ' ' + pkmnSpecie?.name.charAt(0).toUpperCase() + pkmnSpecie?.name.slice(1)}
+      </Text>
+      <Text style={styles.types}>
+        {types.map((type, index) => (
+          <Text key={type} style={styles.boldText}>
+            {type}
+            {index < types.length - 1 ? ', ' : ''}
+          </Text>
+        ))}
       </Text>
 
       <ScrollView style={[styles.descriptionContainer, { borderColor: color }]}>
-        <Text style={styles.types}>
-          {types.map((type, index) => (
-            <Text key={type} style={styles.boldText}>
-              {type}
-              {index < types.length - 1 ? ', ' : ''}
-            </Text>
-          ))}
-        </Text>
 
         <Text style={styles.description}>
           {spanishFlavorTexts[2]?.flavor_text.replace(/[\n\f]/g, ' ')}
