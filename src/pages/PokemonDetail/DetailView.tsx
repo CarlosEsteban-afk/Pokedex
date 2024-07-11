@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../../types/Navigation';
 import { getTest, getPokemonType } from '../../services';
 import type { PokemonSpecies, PokemonType } from 'pokenode-ts';
-import { TeamContext, } from '../../contexts/TeamContext';
+import { TeamContext } from '../../contexts/TeamContext';
 import pokemonTypeColors from '../../utils/getColorByType'; // Import your color utility
 import AppStyles from '../../styles/AppStyles';
 
@@ -12,12 +12,13 @@ type PokemonDetailViewProps = NativeStackScreenProps<RootStackParamList, 'Pokemo
 
 const PokemonDetailView = ({ route, navigation }: PokemonDetailViewProps): React.JSX.Element => {
   const { pokemon_name, uri, color, typeUri } = route.params;
-  const { addPokemon } = useContext(TeamContext);
+  const { team, addPokemon } = useContext(TeamContext);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [pkmnSpecie, setPkmnSpecie] = useState<PokemonSpecies>();
   const [types, setTypes] = useState<string[]>([]);
   const [showToast, setShowToast] = useState<boolean>(false); // State for showing toast message
+  const [toastMessage, setToastMessage] = useState<string>(''); // State for the toast message
 
   const fetchPokemon = async () => {
     try {
@@ -50,7 +51,12 @@ const PokemonDetailView = ({ route, navigation }: PokemonDetailViewProps): React
 
   const handleAddToTeam = () => {
     if (pkmnSpecie) {
-      addPokemon({ id: pkmnSpecie.id.toString(), name: pkmnSpecie.name });
+      if (team.length < 6) {
+        addPokemon({ id: pkmnSpecie.id.toString(), name: pkmnSpecie.name });
+        setToastMessage(`Añadido tu equipo! ${team.length + 1}/6`); // Update toast message
+      } else {
+        setToastMessage('Tu equipo está completo! 6/6');
+      }
       setShowToast(true); // Show the toast message
       setTimeout(() => setShowToast(false), 2000); // Hide the toast after 2 seconds
     }
@@ -72,12 +78,12 @@ const PokemonDetailView = ({ route, navigation }: PokemonDetailViewProps): React
         style={[styles.addButton, { backgroundColor: color }]}
         onPress={handleAddToTeam}
       >
-        <Text style={styles.addButtonText}>Add</Text>
+        <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
 
       {showToast && (
         <View style={styles.toast}>
-          <Text style={styles.toastText}>Added to team!</Text>
+          <Text style={styles.toastText}>{toastMessage}</Text>
         </View>
       )}
 
@@ -98,7 +104,6 @@ const PokemonDetailView = ({ route, navigation }: PokemonDetailViewProps): React
       </Text>
 
       <ScrollView style={[styles.descriptionContainer, { borderColor: color }]}>
-
         <Text style={styles.description}>
           {spanishFlavorTexts[2]?.flavor_text.replace(/[\n\f]/g, ' ')}
         </Text>
@@ -129,9 +134,10 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 20,
   },
   imageContainer: {
-    backgroundColor: 'lightyellow',
+    backgroundColor: AppStyles.color.background,
     borderWidth: 4,
     borderRadius: 120,
     margin: 15,
@@ -151,7 +157,7 @@ const styles = StyleSheet.create({
   descriptionContainer: {
     marginVertical: 30,
     padding: 15,
-    backgroundColor: 'lightyellow',
+    backgroundColor: AppStyles.color.background,
     width: 350,
     borderRadius: 12,
     borderWidth: 4,

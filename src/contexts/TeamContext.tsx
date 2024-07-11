@@ -26,6 +26,11 @@ export const TeamProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [pokemonCounts, setPokemonCounts] = useState<{ [id: string]: number }>({});
 
   const addPokemon = (pokemon: Pokemon) => {
+     if (team.length >= 6) {
+        // Do nothing if team already has 6 Pokémon
+       return;
+     }
+
     setTeam((prevTeam) => [...prevTeam, pokemon]);
     setPokemonCounts((prevCounts) => ({
       ...prevCounts,

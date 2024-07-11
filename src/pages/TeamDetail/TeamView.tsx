@@ -13,10 +13,10 @@ const TeamView: React.FC<TeamViewProps> = ({ navigation }: TeamViewProps) => {
 
   const renderPokemonCard = ({ item }: { item: { id: string; name: string } }) => (
     <View style={styles.cardContainer}>
-      <PokemonCard pokemon={{ name: item.name, url: `https://pokeapi.co/api/v2/pokemon/${item.name}` }} />
       <TouchableOpacity style={styles.deleteButton} onPress={() => handleRemoveFromTeam(item.id)}>
-        <Text style={styles.deleteText}>Remove</Text>
+        <Text style={styles.deleteText}>X</Text>
       </TouchableOpacity>
+      <PokemonCard pokemon={{ name: item.name, url: `https://pokeapi.co/api/v2/pokemon/${item.name}` }} />
     </View>
   );
 
@@ -52,17 +52,26 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     marginBottom: 20,
+    marginTop: 10,
+    marginRight: 10,
+    position: 'relative', // Ensure the delete button is positioned relative to the card container
   },
   deleteButton: {
     backgroundColor: 'red',
-    width: 80,
-    padding: 6,
-    borderRadius: 5,
+    width: 30,
+    height: 30,
+    borderRadius: 15, // Makes the button circular
+    justifyContent: 'center',
     alignItems: 'center',
+    position: 'absolute',
+    top: -10,
+    right: -10,
+    zIndex: 1, // Ensures the button is above the card
   },
   deleteText: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 18,
   },
 });
 
