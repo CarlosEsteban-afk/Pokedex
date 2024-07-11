@@ -42,7 +42,8 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
     //sprites?.other?.['official-artwork']?.front_default;
 
     const sprite = pkmn?.sprites?.other?.['official-artwork'].front_default;
-    navigation.navigate('PokemonDetailView', { pokemon_name: pkmn?.name, uri: sprite, color: color });
+    const typeUri = pkmn?.types.map((type) => type.type.url);
+    navigation.navigate('PokemonDetailView', { pokemon_name: pkmn?.name, uri: sprite, color: color, typeUri: typeUri});
   }
   if (loading) {
     return (

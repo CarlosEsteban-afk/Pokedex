@@ -5,6 +5,7 @@ export type RootStackParamList = {
     pokemon_name: string | undefined;
     uri: string | null | undefined;
     color: string | undefined;
+    typeUri: string[] | undefined;
   };
   TeamView: undefined;
 };

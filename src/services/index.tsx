@@ -1,4 +1,5 @@
-import { PokemonClient } from 'pokenode-ts';
+import axios from 'axios';
+import { PokemonClient, Type } from 'pokenode-ts';
 
 interface PokemonListProps {
   limit: number;
@@ -38,5 +39,18 @@ const getTest = async (name: string) => {
     throw error;
   }
 }
+const getPokemonType = async (uri: string) => {
+  try {
+    
+    const typeNumber = uri.match(/\/(\d+)\//);
+    const parsedTypeNumber = typeNumber ? parseInt(typeNumber[1]) : 0;
+    
+    const response = await client.getTypeById(parsedTypeNumber);
+    return response;
+  } catch (error) {
+    console.error('Error fetching Pokemon:', error);
+    throw error;
+  }
+}
 
-export { getPokemonList, getPokemonByName , getTest};
+export { getPokemonList, getPokemonByName, getTest, getPokemonType };
