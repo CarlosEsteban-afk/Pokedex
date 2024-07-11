@@ -14,7 +14,7 @@ const Router = () => {
             <RootStack.Screen name="HomeView" component={HomeView} options={{ title: 'PokeApp' }} />
             <RootStack.Screen name="PokemonListView" component={PokemonListView} options={{ title: 'Pokedex' }} />
             <RootStack.Screen name="PokemonDetailView" component={PokemonDetailView} options={{ title: 'Pokemon' }} />
-            <RootStack.Screen name="TeamView" component={TeamView} options={{ title: 'Team' }} />
+            <RootStack.Screen name="TeamView" component={TeamView} options={{ title: 'Equipo' }} />
         </RootStack.Navigator>
     )
 }

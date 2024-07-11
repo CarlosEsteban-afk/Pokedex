@@ -32,7 +32,7 @@ const TeamView: React.FC<TeamViewProps> = ({ navigation }: TeamViewProps) => {
         renderItem={renderPokemonCard}
         keyExtractor={item => item.id}
         contentContainerStyle={{ flexGrow: 1 }}
-        ListEmptyComponent={<Text>No Pokémon in your team.</Text>}
+        ListEmptyComponent={<Text>No hay pokémones en tu equipo.</Text>}
       />
     </View>
   );
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 24,
     paddingTop: 20,
-    backgroundColor: 'lightblue',
+    backgroundColor: AppStyles.color.primary,
   },
   sectionTitle: {
     fontSize: 24,
