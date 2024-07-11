@@ -14,33 +14,32 @@ const PokemonDetailView = ({ route }: Readonly<PokemonDetailViewProps>): React.J
   const [pkmnSpecie, setPkmnSpecie] = useState<PokemonSpecies>();
   const [types, setTypes] = useState<string[]>([]);
 
+  const fetchPokemon = async () => {
+    try {
+      const _pkmnSpecie = await getTest(pokemon_name as string);
+      setPkmnSpecie(_pkmnSpecie);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchTypes = async () => {
+    if (!typeUri) return;
+    try {
+      const fetchedTypes = await Promise.all(typeUri.map(uri => getPokemonType(uri)));
+      const spanishTypeNames = fetchedTypes.map(type =>
+        type.names.find(name => name.language.name === 'es')?.name as string
+
+      );
+      setTypes(spanishTypeNames);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchPokemon = async () => {
-      try {
-        const _pkmnSpecie = await getTest(pokemon_name as string);
-        setPkmnSpecie(_pkmnSpecie);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const fetchTypes = async () => {
-      if (!typeUri) return;
-      try {
-
-        const fetchedTypes = await Promise.all(typeUri.map(uri => getPokemonType(uri)));
-        const spanishTypeNames = fetchedTypes.map(type =>
-          type.names.find(name => name.language.name === 'es')?.name as string          
-
-        );
-        setTypes(spanishTypeNames);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     fetchPokemon();
     fetchTypes();
   }, [pokemon_name, typeUri]);
