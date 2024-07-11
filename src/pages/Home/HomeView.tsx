@@ -14,7 +14,7 @@ type HomeViewProps = NativeStackScreenProps<RootStackParamList, 'HomeView'>;
 function HomeView({ navigation }: Readonly<HomeViewProps>): React.JSX.Element {
 
   const handleClick = (screen: keyof RootStackParamList) => {
-    navigation.navigate(screen);
+    navigation.navigate(screen as "HomeView" | "PokemonListView" | "TeamView");
   }
 
   return (
