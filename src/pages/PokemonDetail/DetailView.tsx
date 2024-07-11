@@ -87,7 +87,6 @@ const PokemonDetailView = ({ route, navigation }: PokemonDetailViewProps): React
 
       <Text style={styles.title}>
         #{pkmnSpecie?.id + ' ' + pkmnSpecie?.name.charAt(0).toUpperCase() + pkmnSpecie?.name.slice(1)}
-        #{pkmnSpecie?.id + ' ' + pkmnSpecie?.name.charAt(0).toUpperCase() + pkmnSpecie?.name.slice(1)}
       </Text>
       <Text style={styles.types}>
         {types.map((type, index) => (
@@ -159,6 +158,7 @@ const styles = StyleSheet.create({
   },
   types: {
     fontWeight: 'bold',
+    color: AppStyles.color.textdark,
   },
   boldText: {
     fontWeight: 'bold',
@@ -168,6 +168,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'justify',
     marginBottom: 10,
+    color: AppStyles.color.textdark
   },
   toast: {
     backgroundColor: 'rgba(0,0,0,0.7)',
