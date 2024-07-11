@@ -7,6 +7,7 @@ import {
   View,
   TouchableOpacity
 } from 'react-native';
+import AppStyles from '../../styles/AppStyles';
 
 type HomeViewProps = NativeStackScreenProps<RootStackParamList, 'HomeView'>;
 
@@ -17,13 +18,13 @@ function HomeView({ navigation }: Readonly<HomeViewProps>): React.JSX.Element {
   }
 
   return (
-    <View style={{ ...styles.sectionContainer, backgroundColor: 'lightblue' }}>
-      <Text style={[styles.sectionTitle, { textAlign: 'center', fontSize: 32 }]}>¡Bienvenido a tu Pokédex!</Text>
-      <TouchableOpacity style={styles.button} onPress={() => handleClick('PokemonListView')}>
-        <Text style={styles.buttonText}>Pokedex</Text>
+    <View style={[styles.sectionContainer, { backgroundColor: AppStyles.color.primary }]}>
+      <Text style={[styles.sectionTitle, { textAlign: 'center', fontSize: 32, color: AppStyles.color.textdark }]}>¡Bienvenido a tu Pokédex!</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: AppStyles.color.secondary }]} onPress={() => handleClick('PokemonListView')}>
+        <Text style={[styles.buttonText, { color: AppStyles.color.textwhite }]}>Pokedex</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => handleClick('TeamView')}>
-        <Text style={styles.buttonText}>Equipo</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: AppStyles.color.secondary }]} onPress={() => handleClick('TeamView')}>
+        <Text style={[styles.buttonText, { color: AppStyles.color.textwhite }]}>Equipo</Text>
       </TouchableOpacity>
     </View>
   );
@@ -41,7 +42,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   button: {
-    backgroundColor: 'blue',
     padding: 10,
     borderRadius: 5,
     marginTop: 20,
@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    color: 'white',
     fontSize: 18,
   },
 });

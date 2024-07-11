@@ -4,6 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/Navigation';
 import { TeamContext } from '../../contexts/TeamContext';
 import PokemonCard from '../../components/PokemonCard';
+import AppStyles from '../../styles/AppStyles';
 
 type TeamViewProps = NativeStackScreenProps<RootStackParamList, 'TeamView'>;
 

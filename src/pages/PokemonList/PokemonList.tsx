@@ -15,6 +15,7 @@ import PokemonCard from '../../components/PokemonCard';
 import { getPokemonList } from '../../services';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/Navigation';
+import AppStyles from '../../styles/AppStyles';
 
 interface Result {
   name: string;
@@ -72,7 +73,7 @@ function PokemonListView({ navigation }: Readonly<PokemonListViewProps>): React.
 
 
   return (
-    <View style={{ backgroundColor: 'lightblue' }}>
+    <View style={{ backgroundColor: AppStyles.color.primary }}>
       <FlatList
         data={pokemonList}
         renderItem={renderPokemonCard}

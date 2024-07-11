@@ -4,8 +4,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../../types/Navigation';
 import { getTest, getPokemonType } from '../../services';
 import type { PokemonSpecies, PokemonType } from 'pokenode-ts';
-import { TeamContext } from '../../contexts/TeamContext';
+import { TeamContext,  } from '../../contexts/TeamContext';
 import pokemonTypeColors from '../../utils/getColorByType'; // Import your color utility
+import AppStyles from '../../styles/AppStyles';
 
 type PokemonDetailViewProps = NativeStackScreenProps<RootStackParamList, 'PokemonDetailView'>;
 
@@ -66,7 +67,7 @@ const PokemonDetailView = ({ route, navigation }: PokemonDetailViewProps): React
   const spanishFlavorTexts = pkmnSpecie.flavor_text_entries.filter(entry => entry.language.name === 'es');
 
   return (
-    <View style={[styles.container, { backgroundColor: 'lightblue' }]}>
+    <View style={[...styles.container, { backgroundColor: AppStyles.color.primary }]}>
       <TouchableOpacity
         style={[styles.addButton, { backgroundColor: color }]}
         onPress={handleAddToTeam}
@@ -85,7 +86,7 @@ const PokemonDetailView = ({ route, navigation }: PokemonDetailViewProps): React
       </View>
 
       <Text style={styles.title}>
-        #{pkmnSpecie.id} {pkmnSpecie.name}
+        #{pkmnSpecie?.id + ' ' + pkmnSpecie?.name.charAt(0).toUpperCase() + pkmnSpecie?.name.slice(1)}
       </Text>
 
       <ScrollView style={[styles.descriptionContainer, { borderColor: color }]}>

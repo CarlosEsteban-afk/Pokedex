@@ -11,6 +11,7 @@ interface PokemonResources {
   name: string;
   url: string;
 }
+import AppStyles from '../styles/AppStyles';
 
 type PokemonCardProps = {
   pokemon: PokemonResources;
@@ -49,7 +50,7 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
   if (loading) {
     return (
       <View style={[styles.card, styles.loadingContainer]}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color={AppStyles.color.textwhite} />
       </View>
     );
   }
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     overflow: 'hidden',
     borderWidth: 5,
-    backgroundColor: 'lightyellow',
+    backgroundColor: AppStyles.color.background,
   },
   image: {
     width: 120,
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
   pkmnName: {
     marginTop: 10,
     fontSize: 20,
-
+    color: AppStyles.color.textdark
   },
   nameContainer: {
     paddingHorizontal: 1,
