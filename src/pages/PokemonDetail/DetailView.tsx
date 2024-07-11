@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../../types/Navigation';
 import { getTest, getPokemonType } from '../../services';
 import type { PokemonSpecies, PokemonType } from 'pokenode-ts';
-import { TeamContext,  } from '../../contexts/TeamContext';
+import { TeamContext, } from '../../contexts/TeamContext';
 import pokemonTypeColors from '../../utils/getColorByType'; // Import your color utility
 import AppStyles from '../../styles/AppStyles';
 
@@ -67,7 +67,7 @@ const PokemonDetailView = ({ route, navigation }: PokemonDetailViewProps): React
   const spanishFlavorTexts = pkmnSpecie.flavor_text_entries.filter(entry => entry.language.name === 'es');
 
   return (
-    <View style={[...styles.container, { backgroundColor: AppStyles.color.primary }]}>
+    <View style={{ ...styles.container, backgroundColor: AppStyles.color.primary }}>
       <TouchableOpacity
         style={[styles.addButton, { backgroundColor: color }]}
         onPress={handleAddToTeam}
